@@ -875,31 +875,39 @@ async function pullFromSheets() {
 
     try {
         showToast("Pulling data from Google Sheets...", "info");
-        const response = await fetch(GOOGLE_SHEETS_URL);
-        const data = await response.json();
+        console.log("Fetching from:", GOOGLE_SHEETS_URL);
         
-        if (data && data.assets) {
-            // Merge or overwrite logic
+        const response = await fetch(GOOGLE_SHEETS_URL, { cache: 'no-cache' });
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const data = await response.json();
+        console.log("Data received from Sheets:", data);
+        
+        if (data && data.assets && data.assets.length > 0) {
             if (confirm(`Found ${data.assets.length} items in Google Sheets. Overwrite current dashboard data?`)) {
-                // Map Google Sheet fields back to app state
                 appState.assets = data.assets.map(a => ({
-                    ...a,
                     id: a.id || (Date.now() + Math.random()),
+                    category: a.category || "stocks",
+                    portfolio: a.portfolio || "Other",
+                    name: a.name || "Unknown",
                     quantity: parseFloat(a.quantity) || 0,
                     invested: parseFloat(a.invested) || 0,
                     value: parseFloat(a.value) || 0,
                     ltp: parseFloat(a.ltp) || 0,
-                    manuallyUpdated: true // Keep them manual to prevent accidental overwrites
+                    purchaseDate: a.date || a.purchasedate || new Date().toISOString().split('T')[0],
+                    manuallyUpdated: true
                 }));
                 
                 saveData();
                 render();
                 showToast("Data pulled from Sheets successfully!", "success");
             }
+        } else {
+            showToast("No data found in the 'PortfolioData' sheet. Try 'Sync Sheets' first.", "warning");
         }
     } catch (e) {
         console.error("Pull failed:", e);
-        showToast("Pull from Sheets failed! Check console for errors.", "error");
+        showToast(`Pull failed: ${e.message}. Check your App Script Deployment.`, "error");
     }
 }
 
