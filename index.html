@@ -26,28 +26,29 @@
         <header>
             <div class="logo">
                 <span class="logo-icon">💰</span>
-                <h1>WealthTracker <small style="font-size: 0.8rem; color: #888; margin-left: 0.5rem;">(v3.2 ACTIVE)</small></h1>
+                <h1>WealthTracker</h1>
                 <div id="live-status" class="live-status">
                     <span class="dot"></span>
                     <span class="status-text">OFFLINE</span>
                 </div>
             </div>
-            <div class="total-worth-card">
-                <span class="label">Total Net Worth</span>
-                <h2 id="overall-net-worth">₹0.00</h2>
-                <div id="networth-growth" class="growth-indicator"></div>
+            <div style="display: flex; gap: 1.5rem; align-items: center;">
+                <div class="total-worth-card">
+                    <span class="label">Total Net Worth</span>
+                    <h2 id="overall-net-worth">₹0.00</h2>
+                    <div id="networth-growth" class="growth-indicator"></div>
+                </div>
+                <div class="total-worth-card health-card" onclick="openTargetsModal()"
+                    style="cursor: pointer; border-left: 4px solid var(--success-color);">
+                    <span class="label">Portfolio Health</span>
+                    <h2 id="portfolio-health-val">0</h2>
+                    <div id="health-status" class="growth-indicator positive" style="font-size: 0.8rem;">Excellent</div>
+                </div>
             </div>
-            <div class="total-worth-card health-card" onclick="openTargetsModal()"
-                style="cursor: pointer; border-left: 4px solid #4cd964;">
-                <span class="label">Portfolio Health Score</span>
-                <h2 id="portfolio-health-val">0</h2>
-                <div id="health-status" class="growth-indicator positive" style="font-size: 0.8rem;">Very Good</div>
-                <div style="font-size: 0.65rem; color: #888; margin-top: 5px;">Click to Set Targets</div>
-            </div>
-            <div class="table-actions" style="margin-left: 2rem;">
-                <button class="btn-primary" onclick="exportToExcel()">📊 Export Excel</button>
-                <button class="btn-primary" style="background: #0f9d58;" onclick="syncToGoogleSheets()">📗 Sync Sheets</button>
-                <button class="btn-primary" style="background: #4285f4;" onclick="pullFromSheets()">📥 Pull Sheets</button>
+            <div class="table-actions">
+                <button class="btn-primary" onclick="exportToExcel()">📊 Export</button>
+                <button class="btn-primary" onclick="syncToGoogleSheets()">📗 Sheets</button>
+                <button class="btn-primary" onclick="pullFromSheets()">📥 Pull</button>
             </div>
         </header>
 
