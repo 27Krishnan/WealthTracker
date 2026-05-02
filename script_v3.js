@@ -786,24 +786,48 @@ let GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyFsEbMhfpkSpq-
 
 async function syncToCloud(data) {
     if (!GOOGLE_SHEETS_URL || GOOGLE_SHEETS_URL.includes("YOUR_APPS_SCRIPT")) {
-        console.log("Cloud sync skipped: No URL provided.");
-        return;
+    console.log("Cloud sync skipped: No URL provided.");
+    return;
     }
     
+    // Filter to include all categories including cash
+    const syncData = {
+        assets: data.assets.map(a => ({
+            id: a.id,
+            category: a.category,
+            name: a.name,
+            folio: a.folio || '',
+            quantity: a.quantity || 1,
+            invested: a.invested || 0,
+            value: a.value || 0,
+            ltp: a.ltp || 0,
+            purchaseDate: a.purchaseDate || '',
+            lastTransDate: a.lastTransDate || '',
+            monthlySIP: a.monthlySIP || 0,
+            portfolio: a.portfolio || '',
+            lastUpdated: a.lastUpdated || new Date().toLocaleDateString()
+        })),
+        history: data.history || [],
+        targets: data.targets || {}
+    };
+    
+    console.log("Syncing data to Google Sheets:", syncData);
+    console.log("Cash entries being synced:", syncData.assets.filter(a => a.category === 'cash'));
+    
     try {
-        const response = await fetch(GOOGLE_SHEETS_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Apps Script requires no-cors for simple posts
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        });
-        console.log("Cloud Sync Triggered...");
-        document.getElementById('sync-status').classList.add('active');
-        setTimeout(() => document.getElementById('sync-status').classList.remove('active'), 2000);
+    const response = await fetch(GOOGLE_SHEETS_URL, {
+    method: 'POST',
+    mode: 'no-cors', // Apps Script requires no-cors for simple posts
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(syncData)
+    });
+    console.log("Cloud Sync Triggered successfully");
+    document.getElementById('sync-status').classList.add('active');
+    setTimeout(() => document.getElementById('sync-status').classList.remove('active'), 2000);
     } catch (e) {
-        console.error("Cloud Sync Failed:", e);
+    console.error("Cloud Sync Failed:", e);
     }
-}
+    }
 
 function exportToExcel() {
     try {
@@ -1430,6 +1454,9 @@ function handleManualSave(e) {
     saveData();
     closeModal();
     render();
+    
+    // Auto-sync to Google Sheets after saving
+    syncToGoogleSheets();
 }
 
 function calculateCAGR(invested, current, purchaseDate) {
