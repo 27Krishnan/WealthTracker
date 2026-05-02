@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>WealthTracker v3.2</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- SheetJS for Excel Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Chart.js (Local) -->
+    <script src="chart.js"></script>
+</head>
+
+<body class="dark-mode">
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">💰</span>
+                <h1>WealthTracker <small style="font-size: 0.8rem; color: #888; margin-left: 0.5rem;">(v3.2 ACTIVE)</small></h1>
+                <div id="live-status" class="live-status">
+                    <span class="dot"></span>
+                    <span class="status-text">OFFLINE</span>
+                </div>
+            </div>
+            <div class="total-worth-card">
+                <span class="label">Total Net Worth</span>
+                <h2 id="overall-net-worth">₹0.00</h2>
+                <div id="networth-growth" class="growth-indicator"></div>
+            </div>
+            <div class="total-worth-card health-card" onclick="openTargetsModal()"
+                style="cursor: pointer; border-left: 4px solid #4cd964;">
+                <span class="label">Portfolio Health Score</span>
+                <h2 id="portfolio-health-val">0</h2>
+                <div id="health-status" class="growth-indicator positive" style="font-size: 0.8rem;">Very Good</div>
+                <div style="font-size: 0.65rem; color: #888; margin-top: 5px;">Click to Set Targets</div>
+            </div>
+            <div class="table-actions" style="margin-left: 2rem;">
+                <button class="btn-primary" onclick="exportToExcel()">📊 Export Excel</button>
+                <button class="btn-primary" style="background: #0f9d58;" onclick="syncToGoogleSheets()">📗 Sync Sheets</button>
+                <button class="btn-primary" style="background: #4285f4;" onclick="pullFromSheets()">📥 Pull Sheets</button>
+            </div>
+        </header>
+
+        <nav class="tab-bar">
+            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn" data-tab="holdings">Stocks & Other Assets</button>
+            <button class="tab-btn" data-tab="mf">Mutual Funds</button>
+            <button class="tab-btn" data-tab="gold">Physical Gold</button>
+            <button class="tab-btn" data-tab="property">Real Estate</button>
+            <button class="tab-btn" data-tab="cash">Cash / Balance</button>
+            <button class="tab-btn" data-tab="analytics">Analytics</button>
+        </nav>
+
+        <main>
+            <div id="dashboard-tab" class="tab-content active">
+                <section class="overview-grid">
+                    <div class="metric-card gold">
+                        <div class="card-header">
+                            <span class="icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="#ffd700">
+                                    <path d="M1 21h22L19 7H5L1 21zm4.5-2L7 11h10l1.5 8h-13z" />
+                                </svg>
+                            </span>
+                            <h3>Physical Gold</h3>
+                        </div>
+                        <div class="card-body">
+                            <h2 id="gold-value">₹0</h2>
+                            <div class="card-metrics">
+                                <div class="metric-row">
+                                    <span class="label">Invested:</span>
+                                    <span id="gold-invested">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">P&L:</span>
+                                    <span id="gold-pnl" class="pnl-value">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">Day P&L:</span>
+                                    <span id="gold-day-pnl" class="pnl-value">₹0 (0%)</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">ROI:</span>
+                                    <span id="gold-roi" class="roi-value">0%</span>
+                                </div>
+                            </div>
+                            <button class="btn-edit" onclick="openManualEntry('gold')">Update</button>
+                        </div>
+                    </div>
+                    <div class="metric-card silver">
+                        <div class="card-header">
+                            <span class="icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00d2ff"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                    <polyline points="17 6 23 6 23 12"></polyline>
+                                </svg>
+                            </span>
+                            <h3>Stocks / Strategy</h3>
+                        </div>
+                        <div class="card-body">
+                            <h2 id="stocks-value">₹0</h2>
+                            <p id="stocks-count">0 Holdings</p>
+                            <div class="card-metrics">
+                                <div class="metric-row">
+                                    <span class="label">Invested:</span>
+                                    <span id="stocks-invested">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">P&L:</span>
+                                    <span id="stocks-pnl" class="pnl-value">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">Booked Profit:</span>
+                                    <span id="stocks-realized-pnl" class="pnl-value positive">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">Day P&L:</span>
+                                    <span id="stocks-day-pnl" class="pnl-value">₹0 (0%)</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">ROI:</span>
+                                    <span id="stocks-roi" class="roi-value">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="metric-card mf">
+                        <div class="card-header">
+                            <span class="icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a259ff"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 21h18"></path>
+                                    <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"></path>
+                                    <path d="M12 2v5"></path>
+                                    <path d="M7 2h10"></path>
+                                </svg>
+                            </span>
+                            <h3>Mutual Funds</h3>
+                        </div>
+                        <div class="card-body">
+                            <h2 id="mf-value">₹0</h2>
+                            <div class="card-metrics">
+                                <div class="metric-row">
+                                    <span class="label">Invested:</span>
+                                    <span id="mf-invested">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">P&L:</span>
+                                    <span id="mf-pnl" class="pnl-value">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">Booked Profit:</span>
+                                    <span id="mf-realized-pnl" class="pnl-value positive">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">Day P&L:</span>
+                                    <span id="mf-day-pnl" class="pnl-value">₹0 (0%)</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">ROI:</span>
+                                    <span id="mf-roi" class="roi-value">0%</span>
+                                </div>
+                            </div>
+                            <button class="btn-edit" onclick="openManualEntry('mf')">Update</button>
+                        </div>
+                    </div>
+                    <div class="metric-card cash">
+                        <div class="card-header">
+                            <span class="icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4cd964"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                                    <circle cx="12" cy="12" r="2"></circle>
+                                    <path d="M6 12h.01M18 12h.01"></path>
+                                </svg>
+                            </span>
+                            <h3>Cash / Balance</h3>
+                        </div>
+                        <div class="card-body">
+                            <h2 id="cash-value">₹0</h2>
+                            <div class="card-metrics">
+                                <div class="metric-row">
+                                    <span class="label">Invested:</span>
+                                    <span id="cash-invested">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">P&L:</span>
+                                    <span id="cash-pnl" class="pnl-value">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">Day P&L:</span>
+                                    <span id="cash-day-pnl" class="pnl-value">₹0 (0%)</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">ROI:</span>
+                                    <span id="cash-roi" class="roi-value">0%</span>
+                                </div>
+                            </div>
+                            <button class="btn-edit" onclick="openManualEntry('cash')">Update</button>
+                        </div>
+                    </div>
+                    <!-- Passive Income Engine -->
+                    <div class="metric-card gold" onclick="openPassiveIncomeModal()" style="cursor: pointer;">
+                        <div class="card-header">
+                            <span class="icon">💸</span>
+                            <h3>Passive Income ℹ️</h3>
+                        </div>
+                        <div class="card-body">
+                            <h2 id="passive-income-yearly">₹0</h2>
+                            <div class="card-metrics">
+                                <div class="metric-row">
+                                    <span class="label">Monthly average:</span>
+                                    <span id="passive-income-monthly" class="pnl-value positive">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">Yield (Portfolio):</span>
+                                    <span id="passive-income-yield" class="roi-value">0%</span>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.75rem; color: #888; margin-top: 5px;">Estimated Annual Projection
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Real Estate Card -->
+                    <div class="metric-card property">
+                        <div class="card-header">
+                            <span class="icon">🏠</span>
+                            <h3>Real Estate</h3>
+                        </div>
+                        <div class="card-body">
+                            <h2 id="property-value">₹0</h2>
+                            <div class="card-metrics">
+                                <div class="metric-row">
+                                    <span class="label">Invested:</span>
+                                    <span id="property-invested">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">Abs. Return:</span>
+                                    <span id="property-pnl" class="pnl-value">₹0</span>
+                                </div>
+                                <div class="metric-row">
+                                    <span class="label">CAGR:</span>
+                                    <span id="property-cagr" class="roi-value">0%</span>
+                                </div>
+                            </div>
+                            <button class="btn-edit" onclick="openManualEntry('property')">Update</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="upload-section card">
+                    <h3>Upload Financial Files</h3>
+                    <p class="subtitle">Upload your Stock Excel or Strategy Champions file to auto-update holdings.</p>
+                    <div id="drop-zone" class="drop-zone">
+                        <div class="dz-content">
+                            <span class="dz-icon">📂</span>
+                            <p>Drag & Drop Excel files or <span>Browse</span></p>
+                            <input type="file" id="file-input" multiple accept=".xlsx, .xls, .csv">
+                        </div>
+                    </div>
+                    <div id="file-list" class="file-list"></div>
+                </section>
+            </div>
+
+            <div id="holdings-tab" class="tab-content">
+                <section class="data-table-section card">
+                    <div class="table-header">
+                        <h3>Stocks & Other Assets</h3>
+                        <div class="table-actions">
+                            <select id="portfolio-filter" class="filter-select"
+                                onchange="handlePortfolioFilter(this.value)">
+                                <!-- Dynamic options -->
+                            </select>
+                            <input type="text" id="table-search" placeholder="Search assets...">
+                            <button class="btn-action" onclick="exportToExcel()">📊 Export</button>
+                        </div>
+                    </div>
+                    <div id="portfolio-summary-bar" class="portfolio-summary hidden">
+                        <div class="summary-item">
+                            <span class="label">Holdings:</span>
+                            <span id="port-count" class="value">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Invested:</span>
+                            <span id="port-invested" class="value">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Value:</span>
+                            <span id="port-value" class="value">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Total P&L:</span>
+                            <span id="port-pnl" class="value">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">ROI:</span>
+                            <span id="port-roi" class="value">0%</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Day P&L:</span>
+                            <span id="port-day-pnl" class="value">₹0 (0%)</span>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="assets-table">
+                            <thead>
+                                <tr>
+                                    <th data-sort="category">Category</th>
+                                    <th data-sort="portfolio">Portfolio</th>
+                                    <th data-sort="name">Asset</th>
+                                    <th data-sort="quantity">Qty</th>
+                                    <th data-sort="avg_cost">Avg. Cost</th>
+                                    <th data-sort="ltp">LTP</th>
+                                    <th data-sort="invested">Invested</th>
+                                    <th data-sort="value">Value</th>
+                                    <th data-sort="div_yield">Div. Yield</th>
+                                    <th data-sort="pnl">Total P&L</th>
+                                    <th data-sort="day_chg_rs">Day Chg Rs</th>
+                                    <th data-sort="day_chg_pct">Day Chg %</th>
+                                    <th data-sort="roi">ROI %</th>
+                                    <th data-sort="cagr">CAGR</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assets-body">
+                                <!-- Rows will be injected by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <div id="mf-tab" class="tab-content">
+                <section class="data-table-section card">
+                    <div class="table-header">
+                        <h3>Detailed Mutual Fund Performance</h3>
+                        <div class="table-actions">
+                            <select id="mf-portfolio-filter" class="filter-select"
+                                onchange="handlePortfolioFilter(this.value)">
+                                <!-- Dynamic options -->
+                            </select>
+                            <input type="text" id="mf-search" placeholder="Search funds...">
+                            <button class="btn-action" onclick="exportToExcel()">📊 Export</button>
+                            <button class="btn-primary" onclick="openManualEntry('mf')">+ Add Fund</button>
+                        </div>
+                    </div>
+                    <div id="mf-portfolio-summary-bar" class="portfolio-summary hidden">
+                        <div class="summary-item">
+                            <span class="label">Funds:</span>
+                            <span id="mf-port-count" class="value">0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Invested:</span>
+                            <span id="mf-port-invested" class="value">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Current Value:</span>
+                            <span id="mf-port-value" class="value">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Total P&L:</span>
+                            <span id="mf-port-pnl" class="value">₹0</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">ROI:</span>
+                            <span id="mf-port-roi" class="value">0%</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="label">Day P&L:</span>
+                            <span id="mf-port-day-pnl" class="value">₹0 (0%)</span>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="mf-table">
+                            <thead>
+                                <tr>
+                                    <th data-sort="name">Fund Name</th>
+                                    <th data-sort="portfolio">Portfolio</th>
+                                    <th data-sort="purchaseDate">Start Date</th>
+                                    <th data-sort="lastTransDate">Last Trans</th>
+                                    <th data-sort="monthlySIP">Monthly SIP</th>
+                                    <th data-sort="sipDate">SIP Date</th>
+                                    <th data-sort="quantity">Units</th>
+                                    <th>Avg. NAV</th>
+                                    <th data-sort="ltp">Current NAV</th>
+                                    <th data-sort="invested">Invested</th>
+                                    <th data-sort="value">Current Value</th>
+                                    <th>Total P&L</th>
+                                    <th>ROI %</th>
+                                    <th>XIRR %</th>
+                                    <th>CAGR</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mf-body">
+                                <!-- Mutual Fund rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <div id="gold-tab" class="tab-content">
+                <section class="data-table-section card">
+                    <div class="table-header">
+                        <h3>Detailed gold Inventory</h3>
+                        <div class="table-actions">
+                            <input type="text" id="gold-search" placeholder="Search gold assets...">
+                            <button class="btn-primary" onclick="openManualEntry('gold')">+ Add Gold</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="gold-table">
+                            <thead>
+                                <tr>
+                                    <th data-sort="name">Asset Name</th>
+                                    <th data-sort="quantity">Weight (g)</th>
+                                    <th data-sort="ltp">Latest Price</th>
+                                    <th data-sort="invested">Invested</th>
+                                    <th data-sort="value">Current Value</th>
+                                    <th data-sort="pnl">Live P&L</th>
+                                    <th data-sort="roi">ROI%</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gold-body">
+                                <!-- Rows will be injected by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <div id="property-tab" class="tab-content">
+                <section class="data-table-section card">
+                    <div class="table-header">
+                        <h3>Property Portfolio</h3>
+                        <div class="table-actions">
+                            <input type="text" id="property-search" placeholder="Search properties...">
+                            <button class="btn-primary" onclick="openManualEntry('property')">+ Add Property</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="property-table">
+                            <thead>
+                                <tr>
+                                    <th data-sort="name">Property Name / Location</th>
+                                    <th data-sort="purchaseDate">Purchase Date</th>
+                                    <th data-sort="invested">Purchase Price</th>
+                                    <th data-sort="value">Current Value</th>
+                                    <th data-sort="pnl">Abs. Return</th>
+                                    <th data-sort="cagr">CAGR %</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="property-body">
+                                <!-- Property rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            <div id="cash-tab" class="tab-content">
+                <section class="data-table-section card">
+                    <div class="table-header">
+                        <h3>Cash & Bank Balances</h3>
+                        <div class="table-actions">
+                            <input type="text" id="cash-search" placeholder="Search accounts...">
+                            <button class="btn-primary" onclick="openManualEntry('cash')">+ Add Cash</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="cash-table">
+                            <thead>
+                                <tr>
+                                    <th data-sort="name">Account / Asset</th>
+                                    <th data-sort="portfolio">Institution</th>
+                                    <th data-sort="value">Balance</th>
+                                    <th data-sort="lastUpdated">Last Updated</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cash-body">
+                                <!-- Rows will be injected by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+    </div>
+
+    <div id="analytics-tab" class="tab-content">
+        <section class="overview-grid" style="grid-template-columns: 1fr; margin-bottom: 2rem;">
+            <div class="chart-card" style="height: 400px;">
+                <h3>Wealth Trend (Net Worth History)</h3>
+                <canvas id="trendChart"></canvas>
+            </div>
+        </section>
+
+        <section class="analytics-grid">
+            <div class="chart-card">
+                <h3>Asset Allocation</h3>
+                <canvas id="allocationChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Sector Analysis</h3>
+                <canvas id="sectorChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <h3>Market Cap & Health</h3>
+                <canvas id="capChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Portfolio Rebalancing Section -->
+        <section class="data-table-section card mt-4">
+            <div class="table-header">
+                <div>
+                    <h3>Portfolio Rebalancing Report ⚖️</h3>
+                    <p class="subtitle">Actionable buy/sell recommendations to stay on target</p>
+                </div>
+                <button class="btn-primary" onclick="openTargetsModal()">⚙️ Set Targets</button>
+            </div>
+            <div class="table-container">
+                <table id="rebalance-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Current Value</th>
+                            <th>Current %</th>
+                            <th>Target %</th>
+                            <th>Deviation</th>
+                            <th>Action Required</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rebalance-body">
+                        <!-- Rebalance rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="optimization-section" class="card mt-4">
+            <div class="table-header">
+                <h3>Portfolio Optimization & Cleanup 🧹</h3>
+                <p class="subtitle">Identify and consolidate clutter (Low value or small quantity holdings)</p>
+            </div>
+            <div class="table-container">
+                <table id="optimization-table">
+                    <thead>
+                        <tr>
+                            <th>Asset Name</th>
+                            <th>Portfolio</th>
+                            <th>Quantity</th>
+                            <th>Current Value</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="optimization-body">
+                        <!-- Optimization recommendations will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="data-table-section card" style="margin-top: 2rem;">
+            <h3>Realized Profit History (Booked Profits) 💰</h3>
+            <div class="table-container">
+                <table id="realized-pnl-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Asset Name</th>
+                            <th>Portfolio</th>
+                            <th>Qty Sold</th>
+                            <th>Buy Price</th>
+                            <th>Sell Price</th>
+                            <th>Profit/Loss</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="realized-pnl-body">
+                        <!-- Data injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+    </section>
+    </div>
+    </main>
+
+    <!-- Reconciliation Modal -->
+    <div id="reconcile-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 500px;">
+            <h2>Portfolio Reconciliation ⚖️</h2>
+            <p id="reconcile-desc" class="subtitle" style="margin-bottom: 1.5rem;">Comparing new upload with existing data...</p>
+            
+            <div id="reconcile-step-1">
+                <label>Select Portfolio to Update/Overwrite:</label>
+                <select id="reconcile-portfolio-select" class="filter-select" style="width: 100%; margin-bottom: 1rem;">
+                    <!-- Portfolios will be injected -->
+                </select>
+                <div style="margin-bottom: 1rem;">
+                    <label>Or Create New Portfolio Name:</label>
+                    <input type="text" id="reconcile-new-name" placeholder="e.g. Zerodha New" class="pm-name-input" style="width: 100%;">
+                </div>
+                <button class="btn-primary" onclick="proceedToReconcile()" style="width: 100%;">Compare & Proceed</button>
+            </div>
+
+            <div id="reconcile-step-2" class="hidden">
+                <div id="sold-assets-list" style="max-height: 300px; overflow-y: auto; margin-bottom: 1rem;">
+                    <!-- Sold assets will be listed here with price inputs -->
+                </div>
+                <button class="btn-primary" onclick="finalizeReconciliation()" style="width: 100%;">Finalize & Book Profit</button>
+            </div>
+            
+            <button class="btn-text" onclick="closeReconcileModal()" style="width: 100%; margin-top: 1rem; color: #888;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Manual Entry Modal -->
+    <div id="manual-entry-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="modal-title">Update Asset</h2>
+            <form id="asset-form">
+                <div class="form-group row">
+                    <div class="col">
+                        <label>Category</label>
+                        <select id="asset-category">
+                            <option value="gold">Physical Gold</option>
+                            <option value="property">Real Estate</option>
+                            <option value="mf">Mutual Fund</option>
+                            <option value="stocks">Stock</option>
+                            <option value="cash">Cash / Balance</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <label style="margin-bottom: 0;">Portfolio / Broker</label>
+                            <button type="button" class="btn-text" onclick="openPortfolioManager()"
+                                style="font-size: 0.7rem; color: var(--primary-color);">Manage</button>
+                        </div>
+                        <select id="asset-portfolio">
+                            <!-- Dynamic options -->
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label>Start Date</label>
+                        <input type="date" id="asset-date">
+                    </div>
+                    <div id="last-trans-col" class="col">
+                        <label>Last Trans Date</label>
+                        <input type="date" id="asset-last-date">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label id="asset-name-label">Fund Name / Asset</label>
+                        <input type="text" id="asset-name" placeholder="e.g. 24K Gold, Axis Small Cap">
+                    </div>
+                    <div id="folio-col" class="col">
+                        <label>Folio Number</label>
+                        <input type="text" id="asset-folio" placeholder="Optional">
+                    </div>
+                    <div id="sip-col" class="col">
+                        <label>Monthly SIP (₹)</label>
+                        <input type="number" id="asset-sip" step="any" placeholder="0.00">
+                    </div>
+                    <div id="sip-date-col" class="col">
+                        <label>SIP Date</label>
+                        <input type="number" id="asset-sip-date" min="1" max="31" placeholder="1-31">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div id="qty-col" class="col">
+                        <label>Quantity</label>
+                        <input type="number" id="asset-qty" step="any" value="1">
+                    </div>
+                    <div id="invested-col" class="col">
+                        <label>Total Invested (₹)</label>
+                        <input type="number" id="asset-invested" step="any" placeholder="0.00">
+                    </div>
+                    <div id="value-col" class="col">
+                        <label id="asset-value-label">Current Value (₹)</label>
+                        <input type="number" id="asset-value" step="any" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Asset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Trade Modal (Buy/Sell) -->
+    <div id="trade-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="trade-tabs">
+                <div class="trade-tab active" id="tab-buy" onclick="switchTradeTab('buy')">Buy / Add</div>
+                <div class="trade-tab" id="tab-sell" onclick="switchTradeTab('sell')">Sell / Remove</div>
+            </div>
+            <h2 id="trade-title" style="margin: 1.5rem 0 1rem; font-size: 1.25rem;">Buy Asset</h2>
+            <form id="trade-form">
+                <input type="hidden" id="trade-asset-id">
+                <input type="hidden" id="trade-mode" value="buy">
+                <div class="form-group">
+                    <label id="trade-qty-label">Quantity to Buy</label>
+                    <input type="number" id="trade-qty" step="any" required placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label id="trade-price-label">Buy Price per Unit (₹)</label>
+                    <input type="number" id="trade-price" step="any" required placeholder="0.00">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" onclick="closeTradeModal()">Cancel</button>
+                    <button type="submit" class="btn-primary" id="trade-execute-btn">Execute Buy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Drilldown Modal -->
+    <div id="drilldown-modal" class="modal hidden">
+        <div class="modal-content drilldown-content">
+            <div class="modal-header">
+                <h2 id="drilldown-title">Breakdown</h2>
+                <button class="btn-close" onclick="closeDrillDown()">×</button>
+            </div>
+            <div class="table-container">
+                <table id="drilldown-table">
+                    <thead>
+                        <tr>
+                            <th>Asset Name</th>
+                            <th>Current Value</th>
+                            <th>Allocation %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="drilldown-body">
+                        <!-- Drilldown rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- Portfolio Manager Modal -->
+    <div id="portfolio-modal" class="modal hidden">
+        <div class="modal-content" style="width: 400px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0; font-size: 1.25rem;">Manage Portfolios</h2>
+                <button class="btn-text" onclick="closePortfolioModal()" style="font-size: 1.5rem;">&times;</button>
+            </div>
+
+            <div id="portfolio-list" class="portfolio-manager-list"
+                style="max-height: 300px; overflow-y: auto; margin-bottom: 1.5rem;">
+                <!-- Portfolio items will be injected here -->
+            </div>
+
+            <div class="form-group">
+                <label>Add New Portfolio / Broker</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="new-portfolio-name" placeholder="Portfolio Name">
+                    <button type="button" class="btn-primary"
+                        onclick="addPortfolio(document.getElementById('new-portfolio-name').value); document.getElementById('new-portfolio-name').value = '';">
+                        Add
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal-actions" style="margin-top: 1.5rem;">
+                <button type="button" class="btn-secondary" onclick="closePortfolioModal()"
+                    style="width: 100%;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rebalancing Targets Modal -->
+    <div id="targets-modal" class="modal hidden">
+        <div class="modal-content" style="width: 450px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0; font-size: 1.25rem;">Set Target Allocation (%)</h2>
+                <button class="btn-text" onclick="closeTargetsModal()" style="font-size: 1.5rem;">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label>Stocks / Equity (%)</label>
+                <input type="number" id="target-stocks" min="0" max="100" placeholder="e.g. 50">
+            </div>
+            <div class="form-group">
+                <label>Mutual Funds (%)</label>
+                <input type="number" id="target-mf" min="0" max="100" placeholder="e.g. 30">
+            </div>
+            <!-- ... existing target inputs ... -->
+
+            <div class="form-group">
+                <label>Gold & Silver (%)</label>
+                <input type="number" id="target-gold" min="0" max="100" placeholder="e.g. 10">
+            </div>
+            <div class="form-group">
+                <label>Real Estate / Property (%)</label>
+                <input type="number" id="target-property" min="0" max="100" placeholder="e.g. 0">
+            </div>
+            <div class="form-group">
+                <label>Cash / Bank (%)</label>
+                <input type="number" id="target-cash" min="0" max="100" placeholder="e.g. 10">
+            </div>
+
+            <div id="target-total-warning"
+                style="color: #ff5252; font-size: 0.85rem; margin-top: -1rem; margin-bottom: 1rem; display: none;">
+                Total must equal 100%! Current: <span id="target-total-val">0</span>%
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="closeTargetsModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="saveTargets()">Save Targets</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Passive Income Details Modal -->
+    <div id="passive-income-modal" class="modal hidden">
+        <div class="modal-content" style="width: 700px; max-width: 95%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0; font-size: 1.25rem;">Passive Income Breakdown 💸</h2>
+                <button class="btn-text" onclick="closePassiveIncomeModal()" style="font-size: 1.5rem;">&times;</button>
+            </div>
+
+            <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                <table id="passive-income-table">
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Qty</th>
+                            <th>Div. Rate</th>
+                            <th>Est. Annual</th>
+                            <th>Yield</th>
+                        </tr>
+                    </thead>
+                    <tbody id="passive-income-body">
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: 1rem; text-align: right; font-size: 0.9rem; color: #888;">
+                * Based on latest reported dividend rates
+            </div>
+
+            <div class="modal-actions" style="margin-top: 1.5rem;">
+                <button type="button" class="btn-secondary" onclick="closePassiveIncomeModal()"
+                    style="width: 100%;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Logic -->
+    <script src="mf_data_v3.js?v=3.1"></script>
+    <script src="mf_nav_bridge.js"></script>
+    <script src="holdings_bridge.js"></script>
+    <script src="live_prices_bridge.js"></script>
+    <script src="chart.js"></script>
+    <script src="script_v3.js?v=3.1"></script>
+</body>
+
+</html>

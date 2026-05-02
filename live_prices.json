@@ -1,0 +1,571 @@
+{
+    "lastUpdated": "14:33:38",
+    "prices": {
+        "SGBJUN31I-GB": {
+            "ltp": 15354.37,
+            "prevClose": 15205.22,
+            "symbol": "SGBJUN31I-GB"
+        },
+        "AADHARHFC": {
+            "ltp": NaN,
+            "prevClose": 488.6,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "AADHARHFC.NS"
+        },
+        "AARTIPHARM": {
+            "ltp": NaN,
+            "prevClose": 740.25,
+            "divRate": 4.0,
+            "divYield": 0,
+            "symbol": "AARTIPHARM.NS"
+        },
+        "ADANIPOWER": {
+            "ltp": NaN,
+            "prevClose": 221.85,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "ADANIPOWER.NS"
+        },
+        "ARE&M": {
+            "ltp": NaN,
+            "prevClose": 874.55,
+            "divRate": 10.6,
+            "divYield": 0,
+            "symbol": "ARE&M.NS"
+        },
+        "AUTOBEES": {
+            "ltp": NaN,
+            "prevClose": 265.83,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "AUTOBEES.NS"
+        },
+        "BAJFINANCE": {
+            "ltp": NaN,
+            "prevClose": 937.0,
+            "divRate": 5.6,
+            "divYield": 0,
+            "symbol": "BAJFINANCE.NS"
+        },
+        "BANKBEES": {
+            "ltp": 567.0,
+            "prevClose": 567.0,
+            "divRate": 0.0,
+            "divYield": 0.0,
+            "symbol": "BANKBEES.NS"
+        },
+        "BANSAL WIRE INDUSTRIES LIMITED": {
+            "ltp": NaN,
+            "prevClose": 296.46,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "BANSALWIRE.NS"
+        },
+        "BANSALWIRE": {
+            "ltp": NaN,
+            "prevClose": 296.46,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "BANSALWIRE.NS"
+        },
+        "BORORENEW": {
+            "ltp": NaN,
+            "prevClose": 501.5,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "BORORENEW.NS"
+        },
+        "CIPLA": {
+            "ltp": NaN,
+            "prevClose": 1309.6,
+            "divRate": 16.0,
+            "divYield": 0,
+            "symbol": "CIPLA.NS"
+        },
+        "CLEAN": {
+            "ltp": NaN,
+            "prevClose": 819.05,
+            "divRate": 6.0,
+            "divYield": 0,
+            "symbol": "CLEAN.NS"
+        },
+        "CONSUMBEES": {
+            "ltp": NaN,
+            "prevClose": 126.84,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "CONSUMBEES.NS"
+        },
+        "DEVYANI INTERNATIONAL LIMITED": {
+            "ltp": NaN,
+            "prevClose": 124.73,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "DEVYANI.NS"
+        },
+        "DEVYANI": {
+            "ltp": NaN,
+            "prevClose": 124.73,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "DEVYANI.NS"
+        },
+        "ECLERX": {
+            "ltp": NaN,
+            "prevClose": 1429.0,
+            "divRate": 0.5,
+            "divYield": 0,
+            "symbol": "ECLERX.NS"
+        },
+        "EMCURE": {
+            "ltp": NaN,
+            "prevClose": 1680.1,
+            "divRate": 3.0,
+            "divYield": 0,
+            "symbol": "EMCURE.NS"
+        },
+        "FEDERALBNK": {
+            "ltp": NaN,
+            "prevClose": 286.95,
+            "divRate": 1.2,
+            "divYield": 0,
+            "symbol": "FEDERALBNK.NS"
+        },
+        "GK ENERGY LTD": {
+            "ltp": NaN,
+            "prevClose": 127.38,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "GKENERGY.NS"
+        },
+        "GKENERGY": {
+            "ltp": NaN,
+            "prevClose": 127.38,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "GKENERGY.NS"
+        },
+        "GOLDBEES": {
+            "ltp": 123.43,
+            "prevClose": 123.43,
+            "divRate": 0.0,
+            "divYield": 0.0,
+            "symbol": "GOLDBEES.NS"
+        },
+        "GOODLUCK": {
+            "ltp": NaN,
+            "prevClose": 1254.65,
+            "divRate": 7.0,
+            "divYield": 0,
+            "symbol": "GOODLUCK.NS"
+        },
+        "GSPL": {
+            "ltp": NaN,
+            "prevClose": 285.19,
+            "divRate": 5.0,
+            "divYield": 0,
+            "symbol": "GSPL.NS"
+        },
+        "HAL": {
+            "ltp": NaN,
+            "prevClose": 4338.8,
+            "divRate": 50.0,
+            "divYield": 0,
+            "symbol": "HAL.NS"
+        },
+        "HAPPYFORGE": {
+            "ltp": NaN,
+            "prevClose": 1348.0,
+            "divRate": 3.0,
+            "divYield": 0,
+            "symbol": "HAPPYFORGE.NS"
+        },
+        "ICICIAMC": {
+            "ltp": NaN,
+            "prevClose": 3290.2,
+            "divRate": 14.85,
+            "divYield": 0,
+            "symbol": "ICICIAMC.NS"
+        },
+        "IDEA": {
+            "ltp": NaN,
+            "prevClose": 10.22,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "IDEA.NS"
+        },
+        "IDFCFIRSTB": {
+            "ltp": NaN,
+            "prevClose": 69.64,
+            "divRate": 0.25,
+            "divYield": 0,
+            "symbol": "IDFCFIRSTB.NS"
+        },
+        "IEX": {
+            "ltp": NaN,
+            "prevClose": 125.19,
+            "divRate": 3.0,
+            "divYield": 0,
+            "symbol": "IEX.NS"
+        },
+        "IITL": {
+            "ltp": NaN,
+            "prevClose": 166.1,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "IITL.NS"
+        },
+        "INDIAN RAILWAY FIN CORP LTD": {
+            "ltp": NaN,
+            "prevClose": 104.21,
+            "divRate": 2.1,
+            "divYield": 0,
+            "symbol": "IRFC.NS"
+        },
+        "IRFC": {
+            "ltp": NaN,
+            "prevClose": 104.21,
+            "divRate": 2.1,
+            "divYield": 0,
+            "symbol": "IRFC.NS"
+        },
+        "INDIAN RENEW. ENG.DEV. AGY LTD": {
+            "ltp": NaN,
+            "prevClose": 135.1,
+            "divRate": 0.48,
+            "divYield": 0,
+            "symbol": "IREDA.NS"
+        },
+        "IREDA": {
+            "ltp": NaN,
+            "prevClose": 135.1,
+            "divRate": 0.48,
+            "divYield": 0,
+            "symbol": "IREDA.NS"
+        },
+        "IRCTC": {
+            "ltp": NaN,
+            "prevClose": 539.55,
+            "divRate": 9.5,
+            "divYield": 0,
+            "symbol": "IRCTC.NS"
+        },
+        "IRM ENERGY LIMITED": {
+            "ltp": NaN,
+            "prevClose": 356.91,
+            "divRate": 1.5,
+            "divYield": 0,
+            "symbol": "IRMENERGY.NS"
+        },
+        "IRMENERGY": {
+            "ltp": NaN,
+            "prevClose": 356.91,
+            "divRate": 1.5,
+            "divYield": 0,
+            "symbol": "IRMENERGY.NS"
+        },
+        "ISGEC": {
+            "ltp": NaN,
+            "prevClose": 1088.95,
+            "divRate": 5.0,
+            "divYield": 0,
+            "symbol": "ISGEC.NS"
+        },
+        "ITBEES": {
+            "ltp": NaN,
+            "prevClose": 32.44,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "ITBEES.NS"
+        },
+        "ITC": {
+            "ltp": NaN,
+            "prevClose": 314.9,
+            "divRate": 14.35,
+            "divYield": 0,
+            "symbol": "ITC.NS"
+        },
+        "JIOFIN": {
+            "ltp": NaN,
+            "prevClose": 246.37,
+            "divRate": 0.5,
+            "divYield": 0,
+            "symbol": "JIOFIN.NS"
+        },
+        "JUPITER LIFE LINE HOSP. LTD": {
+            "ltp": NaN,
+            "prevClose": 1225.9,
+            "divRate": 1.0,
+            "divYield": 0,
+            "symbol": "JLHL.NS"
+        },
+        "JLHL": {
+            "ltp": NaN,
+            "prevClose": 1225.9,
+            "divRate": 1.0,
+            "divYield": 0,
+            "symbol": "JLHL.NS"
+        },
+        "KALYANKJIL": {
+            "ltp": NaN,
+            "prevClose": 412.75,
+            "divRate": 1.5,
+            "divYield": 0,
+            "symbol": "KALYANKJIL.NS"
+        },
+        "KKCL": {
+            "ltp": NaN,
+            "prevClose": 474.85,
+            "divRate": 4.0,
+            "divYield": 0,
+            "symbol": "KKCL.NS"
+        },
+        "KTKBANK": {
+            "ltp": NaN,
+            "prevClose": 268.61,
+            "divRate": 5.0,
+            "divYield": 0,
+            "symbol": "KTKBANK.NS"
+        },
+        "LENSKART SOLUTIONS LIMITED": {
+            "ltp": NaN,
+            "prevClose": 515.95,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "LENSKART.NS"
+        },
+        "LENSKART": {
+            "ltp": NaN,
+            "prevClose": 515.95,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "LENSKART.NS"
+        },
+        "LGEINDIA": {
+            "ltp": NaN,
+            "prevClose": 1593.0,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "LGEINDIA.NS"
+        },
+        "LTM": {
+            "ltp": NaN,
+            "prevClose": 4269.6,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "LTM.NS"
+        },
+        "MANAPPURAM": {
+            "ltp": NaN,
+            "prevClose": 294.35,
+            "divRate": 2.0,
+            "divYield": 0,
+            "symbol": "MANAPPURAM.NS"
+        },
+        "MMFL": {
+            "ltp": NaN,
+            "prevClose": 494.4,
+            "divRate": 4.0,
+            "divYield": 0,
+            "symbol": "MMFL.NS"
+        },
+        "MUTHOOTMF": {
+            "ltp": NaN,
+            "prevClose": 192.38,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "MUTHOOTMF.NS"
+        },
+        "NATCOPHARM": {
+            "ltp": NaN,
+            "prevClose": 1095.75,
+            "divRate": 5.0,
+            "divYield": 0,
+            "symbol": "NATCOPHARM.NS"
+        },
+        "NATIONAL SECURITIES DEP LTD": {
+            "ltp": NaN,
+            "prevClose": 880.85,
+            "divRate": 2.0,
+            "divYield": 0,
+            "symbol": "NSDL.BO"
+        },
+        "NSDL.BO": {
+            "ltp": NaN,
+            "prevClose": 880.85,
+            "divRate": 2.0,
+            "divYield": 0,
+            "symbol": "NSDL.BO"
+        },
+        "NAZARA": {
+            "ltp": NaN,
+            "prevClose": 263.56,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "NAZARA.NS"
+        },
+        "NIFTYBEES": {
+            "ltp": 272.01,
+            "prevClose": 272.01,
+            "divRate": 0.0,
+            "divYield": 0.0,
+            "symbol": "NIFTYBEES.NS"
+        },
+        "NTPC": {
+            "ltp": NaN,
+            "prevClose": 399.15,
+            "divRate": 8.85,
+            "divYield": 0,
+            "symbol": "NTPC.NS"
+        },
+        "OPTIEMUS": {
+            "ltp": NaN,
+            "prevClose": 415.8,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "OPTIEMUS.NS"
+        },
+        "PGINVIT": {
+            "ltp": NaN,
+            "prevClose": 93.18,
+            "divRate": 12.0,
+            "divYield": 0,
+            "symbol": "PGINVIT.NS"
+        },
+        "PGINVIT-IV": {
+            "ltp": NaN,
+            "prevClose": 93.15,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "PGINVIT-IV.NS"
+        },
+        "PHARMABEES": {
+            "ltp": NaN,
+            "prevClose": 23.91,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "PHARMABEES.NS"
+        },
+        "PREMIERENE": {
+            "ltp": NaN,
+            "prevClose": 1018.15,
+            "divRate": 0.75,
+            "divYield": 0,
+            "symbol": "PREMIERENE.NS"
+        },
+        "PRUDENT": {
+            "ltp": NaN,
+            "prevClose": 2826.1,
+            "divRate": 2.5,
+            "divYield": 0,
+            "symbol": "PRUDENT.NS"
+        },
+        "RESPONIND": {
+            "ltp": NaN,
+            "prevClose": 156.16,
+            "divRate": 0.1,
+            "divYield": 0,
+            "symbol": "RESPONIND.NS"
+        },
+        "SBIN": {
+            "ltp": NaN,
+            "prevClose": 1068.45,
+            "divRate": 15.9,
+            "divYield": 0,
+            "symbol": "SBIN.NS"
+        },
+        "SILVERBEES": {
+            "ltp": 227.5,
+            "prevClose": 227.5,
+            "divRate": 0.0,
+            "divYield": 0.0,
+            "symbol": "SILVERBEES.NS"
+        },
+        "SUPREMEIND": {
+            "ltp": NaN,
+            "prevClose": 3622.6,
+            "divRate": 35.0,
+            "divYield": 0,
+            "symbol": "SUPREMEIND.NS"
+        },
+        "TATA STEEL LIMITED": {
+            "ltp": NaN,
+            "prevClose": 211.36,
+            "divRate": 3.6,
+            "divYield": 0,
+            "symbol": "TATASTEEL.NS"
+        },
+        "TATASTEEL": {
+            "ltp": NaN,
+            "prevClose": 211.36,
+            "divRate": 3.6,
+            "divYield": 0,
+            "symbol": "TATASTEEL.NS"
+        },
+        "TATACHEM": {
+            "ltp": NaN,
+            "prevClose": 809.0,
+            "divRate": 11.0,
+            "divYield": 0,
+            "symbol": "TATACHEM.NS"
+        },
+        "TATATECH": {
+            "ltp": NaN,
+            "prevClose": 581.35,
+            "divRate": 11.7,
+            "divYield": 0,
+            "symbol": "TATATECH.NS"
+        },
+        "TCS": {
+            "ltp": NaN,
+            "prevClose": 2473.9,
+            "divRate": 109.0,
+            "divYield": 0,
+            "symbol": "TCS.NS"
+        },
+        "TIMKEN": {
+            "ltp": NaN,
+            "prevClose": 3428.8,
+            "divRate": 36.0,
+            "divYield": 0,
+            "symbol": "TIMKEN.NS"
+        },
+        "TMCV": {
+            "ltp": NaN,
+            "prevClose": 409.9,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "TMCV.NS"
+        },
+        "TMPV": {
+            "ltp": NaN,
+            "prevClose": 341.55,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "TMPV.NS"
+        },
+        "TTKPRESTIG": {
+            "ltp": NaN,
+            "prevClose": 504.9,
+            "divRate": 6.0,
+            "divYield": 0,
+            "symbol": "TTKPRESTIG.NS"
+        },
+        "VMM": {
+            "ltp": NaN,
+            "prevClose": 122.29,
+            "divRate": 0.0,
+            "divYield": 0,
+            "symbol": "VMM.NS"
+        },
+        "WELCORP": {
+            "ltp": NaN,
+            "prevClose": 1266.75,
+            "divRate": 5.0,
+            "divYield": 0,
+            "symbol": "WELCORP.NS"
+        }
+    },
+    "source": "Yahoo Finance"
+}

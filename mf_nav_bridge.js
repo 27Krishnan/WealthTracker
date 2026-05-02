@@ -1,0 +1,38 @@
+window.mfNavBridge = {
+  "Axis Focused Fund Direct Growth (91078883676)": {
+    "nav": 59.6,
+    "last_updated": "2026-05-02 14:33:42"
+  },
+  "Axis Large Cap Fund Direct Growth (91075921522)": {
+    "nav": 66.58,
+    "last_updated": "2026-05-02 14:33:42"
+  },
+  "Axis Small Fund Direct Growth (91078429486)": {
+    "nav": 122.8,
+    "last_updated": "2026-05-02 14:33:42"
+  },
+  "ICICI Prudential Value Fund Direct Plan (41839077)": {
+    "nav": 509.05,
+    "last_updated": "2026-05-02 14:33:42"
+  },
+  "Quant Mid Cap Fund-Direct Plan-Growth (51066783381)": {
+    "nav": 240.5353,
+    "last_updated": "2026-05-02 14:33:42"
+  },
+  "SBI Focused Fund Direct Plan Growth (46084161)": {
+    "nav": 435.8229,
+    "last_updated": "2026-05-02 14:33:42"
+  },
+  "SBI Small Cap Fund Direct Plan Growth": {
+    "nav": 193.4131,
+    "last_updated": "2026-05-02 14:33:42"
+  },
+  "SBI Small Cap Fund Regular Plan Growth": {
+    "nav": 167.9346,
+    "last_updated": "2026-05-02 14:33:42"
+  },
+  "UTI Nifty 50 Index Fund Direct Plan (588353567847)": {
+    "nav": 167.7711,
+    "last_updated": "2026-05-02 14:33:42"
+  }
+};
