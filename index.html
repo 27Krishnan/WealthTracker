@@ -45,6 +45,7 @@
                 <div style="font-size: 0.65rem; color: #888; margin-top: 5px;">Click to Set Targets</div>
             </div>
             <div class="table-actions" style="margin-left: 2rem;">
+                <button class="btn-primary" onclick="openSettings()" style="background: #555;">⚙️ Settings</button>
                 <button class="btn-primary" onclick="exportToExcel()">📊 Export Excel</button>
                 <button class="btn-primary" style="background: #0f9d58;" onclick="syncToGoogleSheets()">📗 Sync Sheets</button>
                 <button class="btn-primary" style="background: #4285f4;" onclick="pullFromSheets()">📥 Pull Sheets</button>
@@ -875,7 +876,28 @@
     <script src="live_prices_bridge.js"></script>
     <script src="chart.js"></script>
     <script src="script_v3.js?v=3.1"></script>
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>App Settings ⚙️</h2>
+                <button class="close-btn" onclick="closeSettings()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Google Sheets Web App URL</label>
+                    <input type="text" id="settings-sheet-url" placeholder="https://script.google.com/macros/s/.../exec" style="width: 100%; padding: 10px; background: #222; color: white; border: 1px solid #444; border-radius: 5px;">
+                    <small style="color: #888; display: block; margin-top: 5px;">Paste your Google Apps Script URL here for cloud sync.</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeSettings()">Cancel</button>
+                <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+            </div>
+        </div>
+    </div>
 </body>
 
-</html>   
+</html>  
+ 
  

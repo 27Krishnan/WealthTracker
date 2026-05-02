@@ -3104,3 +3104,29 @@ function renderPassiveIncomeDetails() {
  d o c u m e n t . a d d E v e n t L i s t e n e r ( ' D O M C o n t e n t L o a d e d ' ,   ( )   = >   {   l o a d D a t a ( ) ;   i n i t A u t o S y n c ( ) ;   s t a r t L i v e S y n c ( ) ;   } ) ; 
  
  
+// --- Settings Management ---
+function openSettings() {
+    const modal = document.getElementById('settings-modal');
+    const input = document.getElementById('settings-sheet-url');
+    if (modal && input) {
+        input.value = localStorage.getItem('wealth_tracker_sheet_url') || GOOGLE_SHEETS_URL;
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeSettings() {
+    const modal = document.getElementById('settings-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function saveSettings() {
+    const url = document.getElementById('settings-sheet-url').value.trim();
+    if (url) {
+        localStorage.setItem('wealth_tracker_sheet_url', url);
+        GOOGLE_SHEETS_URL = url;
+        showToast("Settings saved successfully!", "success");
+        closeSettings();
+    } else {
+        alert("Please enter a valid URL.");
+    }
+}
