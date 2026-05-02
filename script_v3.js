@@ -646,6 +646,11 @@ function loadData() {
 
     // Load Assets
     const saved = localStorage.getItem('wealth_tracker_data');
+    
+    // Ensure Sheet URL is updated from potential manual entry
+    const savedSheetUrl = localStorage.getItem('wealth_tracker_sheet_url');
+    if (savedSheetUrl) GOOGLE_SHEETS_URL = savedSheetUrl;
+
     if (saved) {
         try {
             const parsed = JSON.parse(saved);
