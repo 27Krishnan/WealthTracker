@@ -1361,35 +1361,36 @@ function closeModal() {
 }
 
 function handleManualSave(e) {
-    e.preventDefault();
-    const cat = document.getElementById('asset-category').value;
-    const name = document.getElementById('asset-name').value;
-    const val = document.getElementById('asset-value').value;
-    const invested = document.getElementById('asset-invested').value;
-    const date = document.getElementById('asset-date').value;
-    const qty = document.getElementById('asset-qty').value;
+  e.preventDefault();
+  const cat = document.getElementById('asset-category').value;
+  const name = document.getElementById('asset-name').value;
+  const val = document.getElementById('asset-value').value;
+  const invested = document.getElementById('asset-invested').value;
+  const date = document.getElementById('asset-date').value;
+  const qty = document.getElementById('asset-qty').value;
+  
+  if (!name || !val) {
+  alert("Please fill in all fields.");
+  return;
+  }
 
-    if (!name || !val) {
-        alert("Please fill in all fields.");
-        return;
-    }
-
-    const ltp = (parseFloat(val) && parseFloat(qty)) ? (parseFloat(val) / parseFloat(qty)) : 0;
+    const isCash = cat === 'cash';
+    const ltp = (parseFloat(val) && parseFloat(qty) && !isCash) ? (parseFloat(val) / parseFloat(qty)) : 0;
 
     const assetData = {
         id: appState.editingId || Date.now(),
         category: cat,
         name: name,
         folio: document.getElementById('asset-folio').value || "",
-        quantity: parseFloat(qty) || 1,
-        invested: parseFloat(invested) || parseFloat(val),
+        quantity: isCash ? 1 : (parseFloat(qty) || 1),
+        invested: isCash ? parseFloat(val) : (parseFloat(invested) || parseFloat(val)),
         value: parseFloat(val),
         ltp: ltp,
         purchaseDate: date || new Date().toISOString().split('T')[0],
         lastTransDate: document.getElementById('asset-last-date').value,
         monthlySIP: parseFloat(document.getElementById('asset-sip').value) || 0,
         sipDate: parseInt(document.getElementById('asset-sip-date').value) || null,
-        portfolio: document.getElementById('asset-portfolio').value,
+        portfolio: document.getElementById('asset-portfolio').value || 'Cash',
         lastUpdated: new Date().toLocaleDateString(),
         manuallyUpdated: true,
         lastManualUpdate: Date.now()
