@@ -791,7 +791,7 @@ function saveData() {
 
 // Global variable for Google Sheets Web App URL
 // You need to replace this with your actual URL from Step 2
-let GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbyFsEbMhfpkSpq-w30J75s4vhkzmfJ5TJP1KD-bSFg-VSWmIsQiZyLATc9-sc5_x8Wo/exec";
+let GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxcoIMw9oQPyg23TopAj2wuhX_voqD9mBlmQOyTwkkVlAEf3axd080pJQjlJIdiayim/exec";
 
 async function syncToCloud(data) {
     if (!GOOGLE_SHEETS_URL || GOOGLE_SHEETS_URL.includes("YOUR_APPS_SCRIPT")) {
