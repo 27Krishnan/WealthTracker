@@ -762,6 +762,15 @@ function loadData() {
 
 
 function saveData() {
+    // De-duplicate assets
+    const seen = new Set();
+    appState.assets = appState.assets.filter(a => {
+        const key = `${a.portfolio || 'Other'}-${(a.name || '').toUpperCase().trim()}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+
     const data = {
         assets: appState.assets,
         history: appState.history,
@@ -795,7 +804,19 @@ async function syncToCloud(data) {
             method: 'POST',
             mode: 'no-cors', // Apps Script requires no-cors for simple posts
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+                ...data,
+                formattedAssets: appState.assets.map(a => ({
+                    Category: a.category,
+                    Portfolio: a.portfolio || "Other",
+                    Name: a.name,
+                    Quantity: a.quantity,
+                    Invested: a.invested,
+                    Value: a.value,
+                    LTP: a.ltp,
+                    Date: a.purchaseDate || ""
+                }))
+            })
         });
         console.log("Cloud Sync Triggered...");
         document.getElementById('sync-status').classList.add('active');
@@ -3063,7 +3084,10 @@ function renderPassiveIncomeDetails() {
         tbody.appendChild(tr);
     });
 }
-   
- f u n c t i o n   i n i t A u t o S y n c ( )   {   c o n s t   s h e e t U r l   =   l o c a l S t o r a g e . g e t I t e m ( ' w e a l t h _ t r a c k e r _ s h e e t _ u r l ' ) ;   i f   ( s h e e t U r l )   {   c o n s o l e . l o g ( ' A u t o - S y n c   e n a b l e d .   N e x t   s y n c   i n   5   m i n u t e s . . . ' ) ;   s e t I n t e r v a l ( ( )   = >   {   c o n s o l e . l o g ( ' P e r f o r m i n g   p e r i o d i c   a u t o - s y n c . . . ' ) ;   s y n c T o C l o u d ( ) ;   } ,   3 0 0 0 0 0 ) ;   }   }  
- d o c u m e n t . a d d E v e n t L i s t e n e r ( ' D O M C o n t e n t L o a d e d ' ,   ( )   = >   {   l o a d D a t a ( ) ;   i n i t A u t o S y n c ( ) ;   s t a r t L i v e S y n c ( ) ;   } ) ;  
+  
+ 
+ f u n c t i o n   i n i t A u t o S y n c ( )   {   c o n s t   s h e e t U r l   =   l o c a l S t o r a g e . g e t I t e m ( ' w e a l t h _ t r a c k e r _ s h e e t _ u r l ' ) ;   i f   ( s h e e t U r l )   {   c o n s o l e . l o g ( ' A u t o - S y n c   e n a b l e d .   N e x t   s y n c   i n   5   m i n u t e s . . . ' ) ;   s e t I n t e r v a l ( ( )   = >   {   c o n s o l e . l o g ( ' P e r f o r m i n g   p e r i o d i c   a u t o - s y n c . . . ' ) ;   s y n c T o C l o u d ( ) ;   } ,   3 0 0 0 0 0 ) ;   }   } 
+ 
+ d o c u m e n t . a d d E v e n t L i s t e n e r ( ' D O M C o n t e n t L o a d e d ' ,   ( )   = >   {   l o a d D a t a ( ) ;   i n i t A u t o S y n c ( ) ;   s t a r t L i v e S y n c ( ) ;   } ) ; 
+ 
  
