@@ -1274,7 +1274,7 @@ function finalizeReconciliation() {
 
 // --- Modal Handling ---
 function openManualEntry(category, editId = null) {
-    const modal = document.getElementById('modal');
+    const modal = document.getElementById('manual-entry-modal');
     const catSelect = document.getElementById('asset-category');
     const title = document.getElementById('modal-title');
     const form = document.getElementById('asset-form');
@@ -1355,7 +1355,7 @@ function updateModalUI() {
 }
 
 function closeModal() {
-    document.getElementById('modal').classList.add('hidden');
+    document.getElementById('manual-entry-modal').classList.add('hidden');
     document.getElementById('asset-form').reset();
     appState.editingId = null;
 }
