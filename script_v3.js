@@ -790,6 +790,69 @@ async function syncToCloud(data) {
     return;
     }
     
+    // Separate assets by category
+    const assetsByCategory = {
+        stocks: data.assets.filter(a => a.category === 'stocks'),
+        mutualFunds: data.assets.filter(a => a.category === 'mutual-funds' || a.category === 'mf'),
+        gold: data.assets.filter(a => a.category === 'gold'),
+        realEstate: data.assets.filter(a => a.category === 'real-estate' || a.category === 'property'),
+        cash: data.assets.filter(a => a.category === 'cash')
+    };
+    
+    // Format all assets with guaranteed fields
+    const formattedAssets = data.assets.map(a => ({
+        id: String(a.id),
+        category: a.category,
+        name: a.name || '',
+        folio: a.folio || '',
+        quantity: Number(a.quantity) || 1,
+        invested: Number(a.invested) || 0,
+        value: Number(a.value) || 0,
+        ltp: Number(a.ltp) || 0,
+        purchaseDate: a.purchaseDate || '',
+        lastTransDate: a.lastTransDate || '',
+        monthlySIP: Number(a.monthlySIP) || 0,
+        sipDate: a.sipDate || '',
+        portfolio: a.portfolio || 'Default',
+        lastUpdated: a.lastUpdated || new Date().toLocaleDateString()
+    }));
+    
+    // Build sync payload
+    const syncData = {
+        allAssets: formattedAssets,
+        stocks: assetsByCategory.stocks,
+        mutualFunds: assetsByCategory.mutualFunds,
+        gold: assetsByCategory.gold,
+        realEstate: assetsByCategory.realEstate,
+        cash: assetsByCategory.cash,
+        history: data.history || [],
+        targets: data.targets || {},
+        timestamp: new Date().toISOString()
+    };
+    
+    console.log("[v0] SYNC DATA - Total Assets:", formattedAssets.length, "Cash entries:", assetsByCategory.cash.length);
+    console.log("[v0] Cash entries detail:", assetsByCategory.cash);
+    
+    try {
+    const response = await fetch(GOOGLE_SHEETS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(syncData)
+    });
+    console.log("[v0] Sync request sent successfully");
+    
+    // Show sync status
+    const syncStatus = document.getElementById('sync-status');
+    if (syncStatus) {
+        syncStatus.classList.add('active');
+        setTimeout(() => syncStatus.classList.remove('active'), 2000);
+    }
+    } catch (e) {
+    console.error("[v0] Sync error:", e);
+    }
+    }
+    
     // Filter to include all categories including cash
     const syncData = {
         assets: data.assets.map(a => ({
