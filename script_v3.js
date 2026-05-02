@@ -3104,6 +3104,24 @@ function renderPassiveIncomeDetails() {
  d o c u m e n t . a d d E v e n t L i s t e n e r ( ' D O M C o n t e n t L o a d e d ' ,   ( )   = >   {   l o a d D a t a ( ) ;   i n i t A u t o S y n c ( ) ;   s t a r t L i v e S y n c ( ) ;   } ) ; 
  
  
+
+function initAutoSync() { 
+    const sheetUrl = localStorage.getItem('wealth_tracker_sheet_url'); 
+    if (sheetUrl) { 
+        console.log('Auto-Sync enabled. Next sync in 5 minutes...'); 
+        setInterval(() => { 
+            console.log('Performing periodic auto-sync...'); 
+            syncToCloud(); 
+        }, 300000); 
+    } 
+}
+
+document.addEventListener('DOMContentLoaded', () => { 
+    loadData(); 
+    initAutoSync(); 
+    if (typeof startLiveSync === 'function') startLiveSync(); 
+});
+
 // --- Settings Management ---
 function openSettings() {
     const modal = document.getElementById('settings-modal');
